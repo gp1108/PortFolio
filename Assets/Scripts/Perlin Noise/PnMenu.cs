@@ -10,6 +10,7 @@ public class PnMenu : MonoBehaviour
     public TMP_InputField worldSizeX;
     public TMP_InputField worldSizeZ;
     public Scrollbar noiseHeight;
+    public Scrollbar detailScale;
 
 
     public void Reload()
@@ -38,5 +39,18 @@ public class PnMenu : MonoBehaviour
     public void HeightNoise()
     {
         perlinNoiseGen.GetComponent<PerlinNoise>().noiseHeight =Mathf.FloorToInt( noiseHeight.value *10);
+    }
+
+    public void DetailScale()
+    {
+        if (detailScale.value == 0)
+        {
+            perlinNoiseGen.GetComponent<PerlinNoise>().detailScale = 1;
+        }
+        else
+        {
+            perlinNoiseGen.GetComponent<PerlinNoise>().detailScale = Mathf.FloorToInt((detailScale.value) * 40);
+        }
+        
     }
 }

@@ -22,7 +22,7 @@ public class PerlinNoise : MonoBehaviour
     private float _gridOffset;
     //Caracteristicas de la perlin noise
     public int noiseHeight; // basicamente como de alto se genera nuestro cubo 
-    [SerializeField] private float _detailScale; //A menos cantidad mas abrupto se ven las coas , valores muy altos pueden dar lugar a superficies muy planas
+    public float detailScale; //A menos cantidad mas abrupto se ven las coas , valores muy altos pueden dar lugar a superficies muy planas
     public GameObject emptyGameObject;
 
     private float _perlinNoiseToInt; // creo esta variable para aproximar los valores a enteros y que de la semsacion de minecraft
@@ -38,7 +38,7 @@ public class PerlinNoise : MonoBehaviour
         worldSizeX= 100;
         worldSizeZ = 100;
         noiseHeight = 6;
-        _detailScale = 30;
+        detailScale = 30;
         PerlinNoiseGen();
 
     }
@@ -51,13 +51,13 @@ public class PerlinNoise : MonoBehaviour
         _gridOffset = 1;
 
 
-        _detailScale = 30;
+        //detailScale = 30;
 
         for (int x = 0; x < worldSizeX; x++)
         {
             for (int z = 0; z < worldSizeZ; z++)
             {
-                _perlinNoiseToInt = Mathf.RoundToInt(GenerateNoise(x, z, _detailScale) * noiseHeight);
+                _perlinNoiseToInt = Mathf.RoundToInt(GenerateNoise(x, z, detailScale) * noiseHeight);
                 
                 Vector3 position = new Vector3(x * _gridOffset, _perlinNoiseToInt, z * _gridOffset); // en el eje y va esto GenerateNoise(x,z,_detailScale) * _noiseHeight
 
