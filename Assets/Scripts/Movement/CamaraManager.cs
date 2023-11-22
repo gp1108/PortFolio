@@ -24,7 +24,7 @@ public class CamaraManager : MonoBehaviour
                 allcameras.gameObject.SetActive(false);
 
             }
-            if(index == cameras.Length)
+            if(index == cameras.Length-1)
             {
                 index = 0;
                 cameras[index].gameObject.SetActive(true);
