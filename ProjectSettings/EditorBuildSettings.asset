@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProceduralGeneration.unity
     guid: 3ef1cc099ce97c34b8f765ccdc686aed
+  - enabled: 1
+    path: Assets/Scenes/SkillTree.unity
+    guid: 5949e56031f83b648a6f27b97e0034ea
   m_configObjects: {}

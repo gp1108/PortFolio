@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -30,7 +30,7 @@ public class Skills : MonoBehaviour
         changeColor,
         changeSize,
         shakeCube,
-        addPhysics,
+        spinAround,
         rainbowColor,
 
     }
@@ -41,10 +41,10 @@ public class Skills : MonoBehaviour
     public Dictionary<SkillName, int> skillCost = new Dictionary<SkillName, int>
     {
         { SkillName.changeColor, 1 },
-        { SkillName.changeSize, 1 },
-        { SkillName.shakeCube, 1 },
-        { SkillName.addPhysics, 1 },
-        { SkillName.rainbowColor, 1 },
+        { SkillName.changeSize, 2 },
+        { SkillName.shakeCube, 3 },
+        { SkillName.spinAround, 4 },
+        { SkillName.rainbowColor, 2 },
     };
 
     
@@ -56,7 +56,7 @@ public class Skills : MonoBehaviour
         { SkillName.changeSize, false },
         { SkillName.shakeCube, false },
         { SkillName.rainbowColor,false},
-        { SkillName.addPhysics,false},
+        { SkillName.spinAround,false},
         
     };
 
@@ -66,7 +66,7 @@ public class Skills : MonoBehaviour
         { SkillName.changeSize, false },
         { SkillName.shakeCube, false },
         { SkillName.rainbowColor,false},
-        { SkillName.addPhysics,false},
+        { SkillName.spinAround,false},
 
     };
     [Header("Skills")]
@@ -81,14 +81,16 @@ public class Skills : MonoBehaviour
 
     public GameObject cube;
     public Material[] material;
+    private bool canShake;
+    private bool canRotate;
+    public TMP_Text skillpointText;
   
-    [Header("Buttons")]
-    public GameObject changeColorButton;
-    public GameObject changeSizeButton;
-    public GameObject shakeCubeButton;
     private void Start()
     {
-        
+        skillPoints = 0;
+        canShake = false;
+        canRotate = false;
+
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         SkillsUI[] skillButtons = canvas.GetComponentsInChildren<SkillsUI>(true);
         foreach(SkillsUI skillUIscript in skillButtons)
@@ -109,11 +111,43 @@ public class Skills : MonoBehaviour
         while(true)
         {
             int sizeX = Random.Range(25, 30);
-            int sizeY = Random.Range(25, 30);
-            int sizeZ = Random.Range(25, 30);
-            cube.transform.localScale = new Vector3(30, 30, 30);
+            int sizeY = Random.Range(25, 50);
+            int sizeZ = Random.Range(25, 40);
+            cube.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    IEnumerator rainbowColor()
+    {
+        while(true)
+        {
+            for(int i = 0; i< material.Length; i++)
+            {
+                cube.GetComponent<MeshRenderer>().material = material[i];
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if(canShake == true)
+        {
+            float traslationY = 2f * Mathf.Sin(10f * Time.time) + 567;
+            cube.transform.position = new Vector3(cube.transform.position.x, traslationY, cube.transform.position.z);
+        }
+        if (canRotate == true)
+        {
+            cube.transform.Rotate(Vector3.up, 20 * Time.deltaTime);
+        }
+        skillpointText.text = "Skill points: " + skillPoints;
+    }
+
+    public void addSkillPoints()
+    {
+        skillPoints += 1;
+        UpdateSkillUI();
     }
     public void unlockSkill(SkillName skill)
     {
@@ -126,7 +160,9 @@ public class Skills : MonoBehaviour
 
                     skillCanBeUnlocked[SkillName.changeSize] = true;
                     skillCanBeUnlocked[SkillName.shakeCube] = true;
-                   
+
+                    cube.GetComponent<MeshRenderer>().material = material[6];
+
                     UnlockSkillLogic(skill);
 
 
@@ -135,15 +171,10 @@ public class Skills : MonoBehaviour
                     if (isSkillUnlocked[SkillName.changeColor] == true)
                     {
 
-                        if (isSkillUnlocked[SkillName.changeSize] == true && isSkillUnlocked[SkillName.shakeCube] == true)
-                        {
-                            skillCanBeUnlocked[SkillName.addPhysics] = true;
-                            skillCanBeUnlocked[SkillName.rainbowColor] = true;
-
-                            StartCoroutine("changeSize");
-
-                        }
-
+                        skillCanBeUnlocked[SkillName.rainbowColor] = true;
+                        StartCoroutine("changeSize");
+                            
+                       
                         UnlockSkillLogic(skill);
                         
 
@@ -152,24 +183,20 @@ public class Skills : MonoBehaviour
                 case SkillName.shakeCube:
                     if (isSkillUnlocked[SkillName.changeColor] == true)
                     {
-                        if (isSkillUnlocked[SkillName.changeSize] == true && isSkillUnlocked[SkillName.shakeCube] == true)
-                        {
-                            skillCanBeUnlocked[SkillName.addPhysics] = true;
 
-                        }
-                        
+                        canShake = true;
 
                         UnlockSkillLogic(skill);
 
             
                     }
                     break;
-                case SkillName.addPhysics:
+                case SkillName.spinAround:
                     if (isSkillUnlocked[SkillName.changeSize] == true && isSkillUnlocked[SkillName.shakeCube] == true)
                     {
 
-
-
+                        
+                        canRotate = true;
                         UnlockSkillLogic(skill);
 
 
@@ -179,8 +206,8 @@ public class Skills : MonoBehaviour
                     if (isSkillUnlocked[SkillName.changeSize] == true)
                     {
 
-
-
+                       
+                        StartCoroutine("rainbowColor");
                         UnlockSkillLogic(skill);
 
 
@@ -201,6 +228,11 @@ public class Skills : MonoBehaviour
 
         skillPoints -= skillCost[skill];
         isSkillUnlocked[skill] = true;
+        if (isSkillUnlocked[SkillName.changeSize] == true && isSkillUnlocked[SkillName.shakeCube] == true)
+        {
+            skillCanBeUnlocked[SkillName.spinAround] = true;
+
+        }
         UpdateSkillUI();
     }
     

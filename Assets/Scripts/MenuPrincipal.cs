@@ -23,4 +23,9 @@ public class MenuPrincipal : MonoBehaviour
     {
         SceneManager.LoadScene(4);
     }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
