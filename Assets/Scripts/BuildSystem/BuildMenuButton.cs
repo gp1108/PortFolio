@@ -71,6 +71,12 @@ public class BuildMenuButton : MonoBehaviour
         }
     }
 
+    public void AddGold()
+    {
+
+        BuildManager.dameReferencia.gold += 100;
+        BuildManager.dameReferencia.UpdatePriceUI();
+    }
 
 
     IEnumerator GoldCheck()
@@ -100,7 +106,11 @@ public class BuildMenuButton : MonoBehaviour
             {
                 tallerButton.GetComponent<Button>().interactable = false;
             }
-            
+            else
+            {
+                tallerButton.GetComponent<Button>().interactable = true;
+            }
+
             yield return new WaitForSeconds(0.3f);
         }
         

@@ -9,6 +9,7 @@ public class Fps : MonoBehaviour
     private bool _enAire;
     private Rigidbody rb;
     private Vector3 posicionInicial;
+    private bool _canMove;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,27 +18,28 @@ public class Fps : MonoBehaviour
         _saltando = false;
         _enAire = false;
         posicionInicial = transform.position;
+        _canMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && _canMove == true)
         {
             transform.position += transform.forward * Time.deltaTime * moveMentSpeed;
 
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && _canMove == true)
         {
             transform.position -= transform.right * Time.deltaTime * moveMentSpeed;
 
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && _canMove == true)
         {
             transform.position -= transform.forward * Time.deltaTime * moveMentSpeed;
 
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && _canMove == true)
         {
             transform.position += transform.right * Time.deltaTime * moveMentSpeed;
 
@@ -55,6 +57,8 @@ public class Fps : MonoBehaviour
             rb.AddForce(Vector3.down * 6, ForceMode.Impulse);
             _enAire = false;
         }
+
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -63,7 +67,7 @@ public class Fps : MonoBehaviour
         {
             _saltando = false;
             _enAire = false;
-
+            _canMove = true;
         }
 
     }
@@ -76,6 +80,14 @@ public class Fps : MonoBehaviour
 
         }
 
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (_enAire == true)
+        {
+            _canMove = false;
+        }
     }
 
     private void OnEnable()

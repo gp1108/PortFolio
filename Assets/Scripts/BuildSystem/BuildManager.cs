@@ -37,7 +37,7 @@ public class BuildManager : MonoBehaviour
     public TMP_Text textBaseTurretCost;
     public TMP_Text textOtherTurretCost;
     public TMP_Text textResearchStructureCost;
-
+    public TMP_Text addGold;
 
     public int gold;
 
@@ -63,7 +63,7 @@ public class BuildManager : MonoBehaviour
     public void Start()
     {
         canvas = FindObjectOfType<Canvas>();
-        gold = 2000;
+        gold = 0;
         //Costs
         baseTurretCost = 10;
         otherTurretCost = 50;
@@ -71,7 +71,7 @@ public class BuildManager : MonoBehaviour
  
         UpdatePriceUI();
 
-        //goldToPay = 5; // igualo aqui al precio de los muros para evitar un bug en el que la partida carga y puedes construir muros sin gastar dinero
+        goldToPay = 10; // igualo aqui al precio de los muros para evitar un bug en el que la partida carga y puedes construir muros sin gastar dinero
     }
 
     private void Update()
@@ -152,15 +152,15 @@ public class BuildManager : MonoBehaviour
     public void StructureCost()
     {
 
-        if (_structureIndex  == 1)
+        if (_structureIndex  == 0)
         {
             goldToPay = baseTurretCost;
         }
-        else if (_structureIndex  == 2)
+        else if (_structureIndex  == 1)
         {
             goldToPay = otherTurretCost;
         }
-        else if (_structureIndex  == 3)
+        else if (_structureIndex  == 2)
         {
             goldToPay = researchStructureCost;
         }
@@ -173,15 +173,16 @@ public class BuildManager : MonoBehaviour
         //La variable more hace referencia a si se ha vendido o colocado el objeto. Si se ha vendido el precio debe disminuir , si se ha colocado , aumentar.
         if(moreCost == true)
         {
-            if (_structureIndex == 1)
+            if (_structureIndex == 0)
             {
                 baseTurretCost += 5;
+               
             }
-            else if (_structureIndex == 2)
+            else if (_structureIndex == 1)
             {
                 otherTurretCost += 10;
             }
-            else if (_structureIndex == 3)
+            else if (_structureIndex == 2)
             {
                 researchStructureCost += 100;
             }
@@ -190,19 +191,19 @@ public class BuildManager : MonoBehaviour
         }
         else if(moreCost == false)
         {
-            if (Index == 1)
+            if (Index == 0)
             {
                 
                 baseTurretCost -= 5;
                 GetGold(baseTurretCost);
             }
-            else if (Index  == 2)
+            else if (Index  == 1)
             {
                
                 otherTurretCost -= 10;
                 GetGold(otherTurretCost);
             }
-            else if (Index  == 3)
+            else if (Index  == 2)
             {
                 
                 researchStructureCost -= 100;
@@ -219,6 +220,7 @@ public class BuildManager : MonoBehaviour
         textBaseTurretCost.text = baseTurretCost.ToString() + "g";
         textOtherTurretCost.text = otherTurretCost.ToString() + "g";
         textResearchStructureCost.text = researchStructureCost.ToString() + "g";
+        addGold.text = gold.ToString() + " gold (g)";
     }
 
     public void PlaceStucture(Vector3 position)

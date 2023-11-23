@@ -16,11 +16,11 @@ public class MenuPrincipal : MonoBehaviour
     }
     public void BuildSystem()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene(4);
     }
     public void Guns()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(5);
     }
 
     public void Movement()
