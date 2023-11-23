@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class MenuPrincipal : MonoBehaviour
 {
-   
 
     public void ProceduralGenration()
     {
@@ -17,11 +16,16 @@ public class MenuPrincipal : MonoBehaviour
     }
     public void BuildSystem()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(5);
     }
     public void Guns()
     {
         SceneManager.LoadScene(4);
+    }
+
+    public void Movement()
+    {
+        SceneManager.LoadScene(3);
     }
 
     public void MainMenu()

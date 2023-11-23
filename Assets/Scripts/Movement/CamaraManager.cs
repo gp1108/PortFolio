@@ -6,7 +6,7 @@ public class CamaraManager : MonoBehaviour
 {
     private bool _isCameraSwaped;
     public GameObject[] cameras;
-    public GameObject[] playerMovement;
+    public GameObject[] textUI;
     private int index;
     void Start()
     {
@@ -24,16 +24,23 @@ public class CamaraManager : MonoBehaviour
                 allcameras.gameObject.SetActive(false);
 
             }
-            if(index == cameras.Length-1)
+            foreach (GameObject textUi in textUI)
+            {
+                textUi.gameObject.SetActive(false);
+
+            }
+            if (index == cameras.Length-1)
             {
                 index = 0;
                 cameras[index].gameObject.SetActive(true);
+                textUI[index].gameObject.SetActive(true);
             }
             else
             {
                 index++;
                 cameras[index].gameObject.SetActive(true);
-                
+                textUI[index].gameObject.SetActive(true);
+
             }
         }
     }
